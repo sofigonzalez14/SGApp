@@ -42,8 +42,8 @@
   --shadow:      0 2px 12px rgba(0, 0, 0, 0.08);
   --shadow-sm:   0 1px 6px rgba(0, 0, 0, 0.06);
 
-  --nav-h:       58px;   /* altura base, sin safe-area-inset-bottom */
-  --header-h:    56px;   /* altura del contenido, el notch se suma por encima */
+  --nav-h:       56px;   /* altura de los botones del nav */
+  --header-h:    56px;   /* altura del contenido del header, el notch se suma por encima */
 }
 
 /* ── Reset ── */
@@ -144,10 +144,10 @@ body {
    MAIN CONTENT
 ══════════════════════════════════════════ */
 #content {
-  /* Top: altura del header (ya incluye notch) + espacio */
+  /* Top: header content + notch + espacio */
   padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px);
-  /* Bottom: altura del nav + home indicator + espacio */
-  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 16px);
+  /* Bottom: botones nav + home indicator + espacio */
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 20px);
   padding-left: 16px;
   padding-right: 16px;
   min-height: 100vh;
@@ -164,20 +164,19 @@ body {
   transform: translateX(-50%);
   width: 100%;
   max-width: 414px;
-  /* Alto base + home indicator */
-  height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
   background: var(--dark);
   border-top: none;
   display: flex;
-  align-items: flex-start;  /* botones al tope, home indicator queda libre abajo */
+  align-items: stretch;
   z-index: 100;
-  padding-top: 6px;
+  /* padding-bottom empuja el home indicator hacia abajo */
   padding-bottom: env(safe-area-inset-bottom, 0px);
   box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
 }
 
 #bottom-nav button {
   flex: 1;
+  height: var(--nav-h);   /* altura fija para todos los botones */
   background: none;
   border: none;
   display: flex;
@@ -190,7 +189,7 @@ body {
   font-size: 10px;
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
-  padding: 8px 4px;
+  padding: 6px 4px 4px;
   transition: color 0.2s;
   position: relative;
 }
@@ -473,6 +472,38 @@ body {
   outline: none;
 }
 .selector-block select:focus { border-color: var(--pink); }
+
+/* ══════════════════════════════════════════
+   STATS GRID (resumen en inicio)
+══════════════════════════════════════════ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-num {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--pink);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 4px;
+}
 
 /* ══════════════════════════════════════════
    CHIPS / BADGES

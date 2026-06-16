@@ -6,7 +6,7 @@ App.router.register('instituciones', renderInstituciones);
 
 function renderInstituciones() {
   const el = document.getElementById('content');
-  const { instituciones } = App.state;
+  const { instituciones, cursos, alumnos } = App.state;
 
   if (!instituciones.length) {
     el.innerHTML = `
@@ -20,8 +20,39 @@ function renderInstituciones() {
     return;
   }
 
+  // ── Resumen ──────────────────────────────────────────────
+  const totalCursos   = cursos.length;
+  const totalAlumnos  = alumnos.length;
+  const totalInst     = instituciones.length;
+
+  const resumen = `
+    <div class="section-title">resumen</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">${totalInst}</div>
+        <div class="stat-label">institución${totalInst !== 1 ? 'es' : ''}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">${totalCursos}</div>
+        <div class="stat-label">curso${totalCursos !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">${totalAlumnos}</div>
+        <div class="stat-label">alumno${totalAlumnos !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#a855f7">${App.state.evaluaciones.length}</div>
+        <div class="stat-label">evaluacion${App.state.evaluaciones.length !== 1 ? 'es' : ''}</div>
+      </div>
+    </div>
+    <div class="section-title">instituciones</div>
+  `;
+
+  // ── Cards ─────────────────────────────────────────────────
   const cards = instituciones.map((inst, i) => {
-    const nCursos = App.state.cursos.filter(c => c.institucion_id == inst.id).length;
+    const nCursos  = cursos.filter(c => c.institucion_id == inst.id).length;
+    const cursIds  = cursos.filter(c => c.institucion_id == inst.id).map(c => c.id);
+    const nAlumnos = alumnos.filter(a => cursIds.includes(a.curso_id)).length;
     return `
       <div class="card card-institucion ${App.helpers.accentClass(i)}"
            onclick="goToCursos('${inst.id}')">
@@ -29,8 +60,9 @@ function renderInstituciones() {
           <div style="flex:1">
             <h3>${inst.nombre}</h3>
             ${inst.descripcion ? `<p>${inst.descripcion}</p>` : ''}
-            <div style="margin-top:8px">
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
               <span class="chip chip-pink">${nCursos} curso${nCursos !== 1 ? 's' : ''}</span>
+              <span class="chip chip-violet">${nAlumnos} alumno${nAlumnos !== 1 ? 's' : ''}</span>
             </div>
           </div>
           <div class="actions" onclick="event.stopPropagation()">
@@ -42,7 +74,7 @@ function renderInstituciones() {
     `;
   }).join('');
 
-  el.innerHTML = cards + `<button class="fab" onclick="openInstitucionModal()">+</button>`;
+  el.innerHTML = resumen + cards + `<button class="fab" onclick="openInstitucionModal()">+</button>`;
 }
 
 function goToCursos(institucionId) {
