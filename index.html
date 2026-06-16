@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>ProfeApp</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <header id="app-header">
+      <button id="back-btn" class="back-btn" onclick="App.router.goBack()">←</button>
+      <img src="icon-logo.jpeg" alt="Logo" class="header-logo" id="header-logo"
+           onerror="this.style.display='none'">
+      <div class="header-title">
+        <h1 id="page-title" style="display:none"></h1>
+        <p id="page-subtitle"></p>
+      </div>
+    </header>
+
+    <main id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Cargando tu app...</p>
+      </div>
+    </main>
+
+    <nav id="bottom-nav">
+      <button onclick="App.router.navigate('instituciones')" id="nav-instituciones">
+        <span class="nav-icon">🏫</span>
+        <span>Inicio</span>
+      </button>
+      <button onclick="App.router.navigate('cursos')" id="nav-cursos">
+        <span class="nav-icon">📚</span>
+        <span>Cursos</span>
+      </button>
+      <button onclick="App.router.navigate('notas')" id="nav-notas">
+        <span class="nav-icon">📝</span>
+        <span>Notas</span>
+      </button>
+      <button onclick="App.router.navigate('asistencia')" id="nav-asistencia">
+        <span class="nav-icon">📅</span>
+        <span>Asistencia</span>
+      </button>
+      <button onclick="App.router.navigate('cierre')" id="nav-cierre">
+        <span class="nav-icon">🎓</span>
+        <span>Cierre</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- Bottom sheet modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="App.modal.closeOutside(event)">
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast"></div>
+
+  <!-- ── Scripts: orden importa, dependencias primero ── -->
+  <script src="js/api.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/helpers.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/views/instituciones.js"></script>
+  <script src="js/views/cursos.js"></script>
+  <script src="js/views/alumnos.js"></script>
+  <script src="js/views/notas.js"></script>
+  <script src="js/views/asistencia.js"></script>
+  <script src="js/views/cierre.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
