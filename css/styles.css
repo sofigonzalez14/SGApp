@@ -42,8 +42,8 @@
   --shadow:      0 2px 12px rgba(0, 0, 0, 0.08);
   --shadow-sm:   0 1px 6px rgba(0, 0, 0, 0.06);
 
-  --nav-h:       68px;
-  --header-h:    60px;
+  --nav-h:       58px;   /* altura base, sin safe-area-inset-bottom */
+  --header-h:    56px;   /* altura del contenido, el notch se suma por encima */
 }
 
 /* ── Reset ── */
@@ -60,10 +60,12 @@ body {
   font-family: 'Nunito', sans-serif;
   background: var(--bg);
   color: var(--text);
-  max-width: 480px;
+  max-width: 414px;
   margin: 0 auto;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ══════════════════════════════════════════
@@ -75,13 +77,18 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 480px;
-  height: var(--header-h);
+  max-width: 414px;
+  /* El alto total incluye el notch (safe-area-inset-top) */
+  height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
   background: var(--dark);
   color: white;
   display: flex;
-  align-items: center;
-  padding: 0 18px;
+  align-items: flex-end;   /* alinea contenido al fondo, debajo del notch */
+  padding: 0 18px env(safe-area-inset-bottom, 0px) * 0;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-bottom: 10px;
   gap: 10px;
   z-index: 100;
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
@@ -137,8 +144,14 @@ body {
    MAIN CONTENT
 ══════════════════════════════════════════ */
 #content {
-  padding: calc(var(--header-h) + 20px) 18px calc(var(--nav-h) + 20px);
+  /* Top: altura del header (ya incluye notch) + espacio */
+  padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 16px);
+  /* Bottom: altura del nav + home indicator + espacio */
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 16px);
+  padding-left: 16px;
+  padding-right: 16px;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 /* ══════════════════════════════════════════
@@ -150,13 +163,16 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 480px;
-  height: var(--nav-h);
+  max-width: 414px;
+  /* Alto base + home indicator */
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
   background: var(--dark);
   border-top: none;
   display: flex;
+  align-items: flex-start;  /* botones al tope, home indicator queda libre abajo */
   z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: 6px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
 }
 
@@ -308,8 +324,8 @@ body {
 /* ── FAB (botón flotante) ── */
 .fab {
   position: fixed;
-  bottom: calc(var(--nav-h) + 18px);
-  right: max(18px, calc(50% - 222px));
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 14px);
+  right: max(18px, calc(50% - 189px));
   width: 54px;
   height: 54px;
   border-radius: var(--radius-full);
@@ -679,7 +695,7 @@ body {
 ══════════════════════════════════════════ */
 #toast {
   position: fixed;
-  bottom: calc(var(--nav-h) + 22px);
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 18px);
   left: 50%;
   transform: translateX(-50%);
   background: var(--text);
